@@ -1,0 +1,10 @@
+<ion-content>
+  <div class="login">
+    <h1>Login</h1>
+    <form (ngSubmit)="onLogin()">
+      <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required />
+      <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
+      <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
+    </form>
+  </div>
+</ion-content>

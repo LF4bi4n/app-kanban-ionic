@@ -1,17 +1,200 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+  <ion-toolbar color="dark">
+    <ion-title>Tablero Kanban</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="main-content p-2">
+    <!-- Navbar Superior -->
+    <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3 py-2 rounded mb-3">
+      <div class="input-group search-bar me-3" style="max-width: 300px;">
+        <span class="input-group-text bg-light border-end-0">
+          <i class="fa-solid fa-magnifying-glass text-muted"></i>
+        </span>
+        <input type="text" class="form-control bg-light border-start-0" placeholder="Buscar tareas..."
+          oninput="window.searchTasks(this.value)">
+      </div>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <div class="ms-auto d-flex align-items-center gap-3">
+        <div class="d-none d-sm-block text-end" style="min-width: 140px;">
+          <small id="progress-label" class="fw-semibold text-muted">0% Complete</small>
+          <div class="progress mt-1" style="height: 6px;">
+            <div id="progress-indicator" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="window.setTaskCategory('todo-column')">
+          <i class="fa-solid fa-plus me-1"></i> Nueva Tarea
+        </button>
+      </div>
+    </header>
+
+    <!-- Tablero Kanban -->
+    <div class="container-fluid p-0">
+      <div class="row g-3">
+        <!-- Por Hacer -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="kanban-column p-3 rounded bg-light" id="todo-column" ondragover="window.allowDrop(event)"
+            ondrop="window.drop(event)">
+            <div class="column-header d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-secondary"><i class="fa-solid fa-circle me-2 text-secondary"></i>Por
+                Hacer</span>
+              <span class="badge bg-secondary rounded-pill">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- En Progreso -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="kanban-column p-3 rounded bg-light" id="inprogress-column" ondragover="window.allowDrop(event)"
+            ondrop="window.drop(event)">
+            <div class="column-header d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-primary"><i class="fa-solid fa-spinner me-2 text-primary"></i>En Progreso</span>
+              <span class="badge bg-primary rounded-pill">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- En Revisión -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="kanban-column p-3 rounded bg-light" id="review-column" ondragover="window.allowDrop(event)"
+            ondrop="window.drop(event)">
+            <div class="column-header d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-warning"><i class="fa-solid fa-eye me-2 text-warning"></i>En Revisión</span>
+              <span class="badge bg-warning text-dark rounded-pill">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completado -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="kanban-column p-3 rounded bg-light" id="done-column" ondragover="window.allowDrop(event)"
+            ondrop="window.drop(event)">
+            <div class="column-header d-flex justify-content-between align-items-center mb-3">
+              <span class="fw-bold text-success"><i
+                  class="fa-solid fa-circle-check me-2 text-success"></i>Completado</span>
+              <span class="badge bg-success rounded-pill">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title d-flex align-items-center" id="taskModalLabel">Tarea</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="taskForm" class="row g-3">
+            <div class="col-12">
+              <label for="task-title" class="form-label fw-semibold">Título *</label>
+              <input type="text" class="form-control" id="task-title" required>
+            </div>
+
+            <div class="col-12">
+              <label for="task-summary" class="form-label fw-semibold">Resumen corto</label>
+              <input type="text" class="form-control" id="task-summary">
+            </div>
+
+            <div class="col-12">
+              <label for="task-details" class="form-label fw-semibold">Detalles técnicos</label>
+              <textarea class="form-control" id="task-details" rows="3"></textarea>
+            </div>
+
+            <div class="col-md-6" id="category-wrap">
+              <label for="task-category" class="form-label fw-semibold">Columna</label>
+              <select class="form-select" id="task-category">
+                <option value="todo-column">Por Hacer</option>
+                <option value="inprogress-column">En Progreso</option>
+                <option value="review-column">En Revisión</option>
+                <option value="done-column">Completado</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="task-priority" class="form-label fw-semibold">Prioridad</label>
+              <select class="form-select" id="task-priority">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="task-assignee" class="form-label fw-semibold">Asignado a</label>
+              <select class="form-select" id="task-assignee">
+                <option value="">Seleccionar Asignado</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="task-parent" class="form-label fw-semibold">Tarea Padre / Epic</label>
+              <select class="form-select" id="task-parent">
+                <option value="">Seleccionar Padre</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="task-due-date" class="form-label fw-semibold">Fecha Límite</label>
+              <input type="date" class="form-control" id="task-due-date">
+            </div>
+
+            <div class="col-md-6">
+              <label for="task-tags" class="form-label fw-semibold">Etiquetas (separadas por coma)</label>
+              <input type="text" class="form-control" id="task-tags" placeholder="Bug, Feature, UI">
+            </div>
+
+            <div class="col-12 text-end mt-4">
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-primary" id="save-task-btn" onclick="window.saveTask()">Guardar
+                Tarea</button>
+            </div>
+          </form>
+
+          <div id="taskDetailsView" class="d-none">
+            <h4 id="task-view-title" class="mb-3"></h4>
+
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <span id="task-view-priority" class="badge"></span>
+              <span id="task-view-parent"></span>
+              <span class="badge bg-light text-dark border">Estado: <strong id="task-view-status"></strong></span>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+              <h6>Detalles:</h6>
+              <p id="task-view-details" class="text-muted"></p>
+            </div>
+
+            <div class="row g-2 small text-muted mb-4">
+              <div class="col-6">
+                <i class="fa-solid fa-user me-1"></i> Asignado: <strong id="task-view-assignee"
+                  class="text-dark"></strong>
+              </div>
+              <div class="col-6">
+                <i class="fa-regular fa-calendar me-1"></i> Fecha límite: <strong id="task-view-due-date"
+                  class="text-dark"></strong>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-primary" id="task-view-edit-btn">
+                <i class="fa-solid fa-pen me-1"></i> Editar Tarea
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 </ion-content>

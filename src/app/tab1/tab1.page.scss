@@ -1,0 +1,72 @@
+.kanban-column {
+    min-height: 70vh;
+    background-color: #f1f3f5 !important;
+    border: 2px dashed transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.kanban-column.drag-over {
+    background-color: #e2e8f0 !important;
+    border-color: #0d6efd;
+}
+
+.card {
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    margin-bottom: 0.75rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card:active {
+    cursor: grabbing;
+}
+
+.card.dragging {
+    opacity: 0.4;
+    border: 2px dashed #0d6efd;
+}
+
+.p-tag {
+    font-size: 0.7rem;
+    padding: 0.25em 0.5em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.priority-high {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.priority-medium {
+    background-color: #fff3cd;
+    color: #664d03;
+}
+
+.priority-low {
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+
+.parent-epic-badge {
+    background-color: #f1f3f5;
+    color: #495057;
+    font-size: 0.75rem;
+}
+
+.assignee-cover {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.75rem;
+    background-color: #e9ecef;
+}
