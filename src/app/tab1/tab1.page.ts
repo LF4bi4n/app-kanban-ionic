@@ -69,6 +69,9 @@ class TaskManager {
 export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   taskManager = new TaskManager();
   draggedElement: HTMLElement | null = null;
+  isOffline: boolean = !navigator.onLine;
+  private onlineListener!: () => void;
+  private offlineListener!: () => void;
 
   constructor(
     private apiService: ApiService,
@@ -78,6 +81,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.registerGlobalFunctions();
+    this.setupNetworkListeners();
   }
 
   ngAfterViewInit() {
@@ -92,6 +96,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     if (modalEl && modalEl.parentElement === document.body) {
       document.body.removeChild(modalEl);
     }
+    if (this.onlineListener) window.removeEventListener('online', this.onlineListener);
+    if (this.offlineListener) window.removeEventListener('offline', this.offlineListener);
   }
 
   async ionViewDidEnter() {
@@ -113,19 +119,39 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     this.cargarTareasAPI();
   }
 
+  setupNetworkListeners() {
+    this.onlineListener = () => {
+      this.isOffline = false;
+      this.showToast('Conexión reestablecida. Sincronizando con el servidor...', 'success');
+      this.cargarTareasAPI();
+    };
+
+    this.offlineListener = () => {
+      this.isOffline = true;
+      this.showToast('Sin conexión a Internet. Modo Offline activado.', 'warning');
+    };
+
+    window.addEventListener('online', this.onlineListener);
+    window.addEventListener('offline', this.offlineListener);
+  }
+
   cargarTareasAPI() {
+    if (!navigator.onLine) {
+      this.showToast('Modo Offline: Cargando tareas locales', 'warning');
+      return;
+    }
+
     this.apiService.getTareas().subscribe({
       next: async (data: any) => {
         if (Array.isArray(data)) {
           this.taskManager.setTasks(data);
           this.renderTasks(this.taskManager.tasks);
-          // Guardar tareas en el almacén local persistente
           await this.storageService.set('cached_tasks', data);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Error al obtener tareas:', err);
-        this.showToast('Mostrando información guardada en memoria local', 'warning');
+        this.showToast('Error de conexión con el servidor. Mostrando datos locales.', 'warning');
       }
     });
   }
