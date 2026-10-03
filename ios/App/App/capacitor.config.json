@@ -3,6 +3,9 @@
 	"appName": "Photo Gallery Cap Ng",
 	"npmClient": "npm",
 	"webDir": "www",
+	"server": {
+		"androidScheme": "http"
+	},
 	"packageClassList": [
 		"AppPlugin",
 		"CAPCameraPlugin",

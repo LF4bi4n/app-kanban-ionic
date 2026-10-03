@@ -1,93 +1,320 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 
-ion-content {
-    --background: radial-gradient(circle at 0% 100%, rgba(104, 128, 138, 0.4) 10%, rgba(138, 114, 76, 0) 40%),
-        linear-gradient(to bottom, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%),
-        linear-gradient(135deg, #670d10 0%, #092756 100%);
-    font-family: 'Open Sans', sans-serif;
+ion-content.login-content {
+  --background: radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(136, 19, 55, 0.3) 0%, transparent 40%),
+                linear-gradient(135deg, #0b132b 0%, #1c2541 50%, #0a0f1d 100%);
+  font-family: 'Inter', sans-serif;
 }
 
-.login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 24px 16px;
+  box-sizing: border-box;
 }
 
-.login h1 {
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    letter-spacing: 1px;
-    text-align: center;
+.login-box {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(23, 37, 84, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px 20px;
+  color: #f8fafc;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
-input {
-    width: 100%;
-    margin-bottom: 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    outline: none;
-    padding: 10px;
-    font-size: 13px;
-    color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.2), 0 1px 1px rgba(255, 255, 255, 0.2);
-    transition: box-shadow 0.5s ease;
-    box-sizing: border-box;
+.brand-header {
+  .brand-icon {
+    font-size: 2rem;
+    color: #38bdf8;
+  }
 
-    &:focus {
-        box-shadow: inset 0 -5px 45px rgba(100, 100, 100, 0.4), 0 1px 1px rgba(255, 255, 255, 0.2);
-    }
-}
-
-.btn {
-    display: inline-block;
-    padding: 4px 10px;
-    margin-bottom: 0;
-    font-size: 13px;
-    line-height: 18px;
-    color: #333333;
-    text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    vertical-align: middle;
-    background-color: #f5f5f5;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    box-sizing: border-box;
-
-    &:hover {
-        color: #333333;
-        text-decoration: none;
-        background-color: #e6e6e6;
-    }
-}
-
-.btn-large {
-    padding: 9px 14px;
-    font-size: 15px;
-    line-height: normal;
-    border-radius: 5px;
-}
-
-.btn-primary {
+  .brand-title {
+    font-size: 1.6rem;
+    font-weight: 700;
     color: #ffffff;
-    background-color: #4a77d4;
-    background-image: linear-gradient(to bottom, #6eb6de, #4a77d4);
-    border: 1px solid #3762bc;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: -0.5px;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
 
-    &:hover,
-    &:active {
-        background-color: #4a77d4;
-    }
+  .brand-subtitle {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
 }
 
-.btn-block {
-    width: 100%;
-    display: block;
+.alert-box {
+  background: rgba(225, 29, 72, 0.2);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fecdd3;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.btn-text-link {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    text-decoration: underline;
+    color: #7dd3fc;
+  }
+}
+
+.input-ip-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .ip-status-indicator {
+    position: absolute;
+    right: 12px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+
+    &.online {
+      background-color: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    &.offline {
+      background-color: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+    }
+  }
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #64748b;
+  }
+
+  &:focus {
+    border-color: #38bdf8;
+    background: rgba(15, 23, 42, 0.85);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+  }
+}
+
+.submit-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* ==============================================================
+   TARJETA DE DIAGNÓSTICO DINÁMICO
+   ============================================================== */
+.diagnostic-card {
+  background: rgba(10, 15, 30, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+  .diagnostic-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+
+    .diag-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #93c5fd;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .status-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+
+      &.pill-online {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+      }
+
+      &.pill-offline {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+    }
+
+    .btn-ping {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.3);
+        color: #ffffff;
+      }
+    }
+  }
+
+  .diagnostic-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .diag-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      .diag-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #94a3b8;
+      }
+
+      .diag-value {
+        font-size: 0.8rem;
+      }
+
+      .diag-code-box {
+        background: rgba(2, 6, 23, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        word-break: break-all;
+
+        code {
+          color: #38bdf8;
+          font-family: 'JetBrains Mono', monospace;
+        }
+      }
+
+      .diag-pre {
+        background: rgba(2, 6, 23, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.72rem;
+        color: #e2e8f0;
+        margin: 0;
+        max-height: 80px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+
+        &.response-area {
+          max-height: 110px;
+
+          &.res-success {
+            border-color: rgba(34, 197, 94, 0.4);
+            color: #86efac;
+          }
+
+          &.res-error {
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+          }
+        }
+      }
+
+      .timestamp-text {
+        font-size: 0.68rem;
+      }
+    }
+  }
+
+  .diagnostic-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 10px;
+
+    .diag-footer-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 2px 4px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #f8fafc;
+      }
+
+      &.text-primary {
+        color: #38bdf8;
+
+        &:hover {
+          color: #7dd3fc;
+        }
+      }
+    }
+  }
 }

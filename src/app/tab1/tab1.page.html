@@ -1,6 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="dark">
     <ion-title>Tablero Kanban</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openDataSources()" title="Configurar Orígenes de Datos">
+        <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="logout()" title="Cerrar Sesión">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -1,10 +1,181 @@
-<ion-content>
-  <div class="login">
-    <h1>Login</h1>
-    <form (ngSubmit)="onLogin()">
-      <input type="text" name="username" [(ngModel)]="username" placeholder="Username" required />
-      <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required />
-      <button type="submit" class="btn btn-primary btn-block btn-large">Let me in.</button>
-    </form>
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <div class="login-box shadow-lg">
+      
+      <!-- Brand & Título -->
+      <div class="brand-header text-center mb-3">
+        <div class="brand-icon mb-2">
+          <i class="fa-solid fa-layer-group text-primary"></i>
+        </div>
+        <h1 class="brand-title">TaskStream</h1>
+        <p class="brand-subtitle">Gestión de Tareas Kanban con XAMPP</p>
+      </div>
+
+      <!-- Alerta de Error si existe -->
+      <div *ngIf="errorMessage" class="alert-box mb-3 text-start">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <!-- Formulario de Autenticación -->
+      <form (ngSubmit)="onLogin()" class="login-form">
+
+        <!-- Selector / Input de IP de Servidor -->
+        <div class="form-group mb-2">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label class="field-label">
+              <i class="fa-solid fa-server me-1"></i> IP del Servidor XAMPP:
+            </label>
+            <button
+              type="button"
+              class="btn-text-link"
+              (click)="goToDataSources()"
+              title="Configurar Orígenes de Datos">
+              <i class="fa-solid fa-sliders me-1"></i> Avanzado
+            </button>
+          </div>
+          <div class="input-ip-group">
+            <input
+              type="text"
+              name="serverIp"
+              [ngModel]="serverIp"
+              (ngModelChange)="onIpChange($event)"
+              placeholder="192.168.100.7"
+              class="form-input font-monospace"
+              required />
+            <span class="ip-status-indicator" [ngClass]="isOnline ? 'online' : 'offline'" title="Estado de Red"></span>
+          </div>
+        </div>
+
+        <!-- Usuario -->
+        <div class="form-group mb-2">
+          <label class="field-label"><i class="fa-solid fa-user me-1"></i> Usuario:</label>
+          <input
+            type="text"
+            name="username"
+            [(ngModel)]="username"
+            placeholder="Ingresa tu usuario"
+            class="form-input"
+            autocomplete="username"
+            required />
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group mb-3">
+          <label class="field-label"><i class="fa-solid fa-lock me-1"></i> Contraseña:</label>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="••••••••"
+            class="form-input"
+            autocomplete="current-password"
+            required />
+        </div>
+
+        <!-- Botón de Login -->
+        <button
+          type="submit"
+          class="btn btn-primary btn-block btn-large submit-btn"
+          [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+          <i *ngIf="!isLoading" class="fa-solid fa-right-to-bracket me-2"></i>
+          {{ isLoading ? 'Conectando...' : 'Iniciar Sesión' }}
+        </button>
+      </form>
+
+      <!-- TARJETA DE DIAGNÓSTICO DINÁMICO (DEBAJO DEL BOTÓN DE LOGIN) -->
+      <div class="diagnostic-card mt-4">
+        <div class="diagnostic-header d-flex justify-content-between align-items-center">
+          <span class="diag-title">
+            <i class="fa-solid fa-terminal me-2 text-info"></i>Diagnóstico Dinámico
+          </span>
+          <div class="d-flex align-items-center gap-2">
+            <span class="status-pill" [ngClass]="diagnostic.isOnline ? 'pill-online' : 'pill-offline'">
+              {{ diagnostic.isOnline ? '🟢 Online' : '🔴 Offline' }}
+            </span>
+            <button
+              type="button"
+              class="btn-ping"
+              (click)="testConnection()"
+              title="Probar Conexión HTTP al Servidor">
+              <i class="fa-solid fa-bolt me-1"></i> Probar
+            </button>
+          </div>
+        </div>
+
+        <div class="diagnostic-body">
+          
+          <!-- 1. Estado HTTP -->
+          <div class="diag-item">
+            <span class="diag-label">Estado HTTP:</span>
+            <span class="diag-value">
+              <span class="badge" [ngClass]="{
+                'bg-success': diagnostic.type === 'success',
+                'bg-danger': diagnostic.type === 'error',
+                'bg-warning text-dark': diagnostic.type === 'loading',
+                'bg-secondary': diagnostic.type === 'idle'
+              }">
+                {{ diagnostic.httpStatus }}
+              </span>
+            </span>
+          </div>
+
+          <!-- 2. Estado de Conexión (navigator.onLine) -->
+          <div class="diag-item">
+            <span class="diag-label">Conexión del Dispositivo:</span>
+            <span class="diag-value font-monospace small">
+              {{ diagnostic.isOnline ? 'navigator.onLine: TRUE (Activa)' : 'navigator.onLine: FALSE (Sin Red)' }}
+            </span>
+          </div>
+
+          <!-- 3. URL Invocada -->
+          <div class="diag-item">
+            <span class="diag-label">URL Invocada:</span>
+            <div class="diag-code-box">
+              <code>{{ diagnostic.invokedUrl || 'Ninguna URL solicitada' }}</code>
+            </div>
+          </div>
+
+          <!-- 4. Payload Enviado -->
+          <div class="diag-item">
+            <span class="diag-label">Payload Enviado:</span>
+            <pre class="diag-pre">{{ diagnostic.payloadSent ? (diagnostic.payloadSent | json) : '(Sin datos enviados aún)' }}</pre>
+          </div>
+
+          <!-- 5. Cabeceras -->
+          <div class="diag-item">
+            <span class="diag-label">Cabeceras:</span>
+            <pre class="diag-pre">{{ diagnostic.headers | json }}</pre>
+          </div>
+
+          <!-- 6. Respuesta o Error Devuelto -->
+          <div class="diag-item">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="diag-label">Respuesta / Error Devuelto:</span>
+              <span *ngIf="diagnostic.timestamp" class="text-muted timestamp-text">
+                {{ diagnostic.timestamp }}
+              </span>
+            </div>
+            <pre class="diag-pre response-area" [ngClass]="{
+              'res-success': diagnostic.type === 'success',
+              'res-error': diagnostic.type === 'error'
+            }">{{ diagnostic.responseOrError ? (diagnostic.responseOrError | json) : '(A la espera de petición)' }}</pre>
+          </div>
+
+        </div>
+
+        <!-- Acciones del Diagnóstico -->
+        <div class="diagnostic-footer d-flex justify-content-between align-items-center pt-2">
+          <button type="button" class="diag-footer-btn" (click)="copyDiagnostic()">
+            <i class="fa-regular fa-copy me-1"></i> Copiar Datos
+          </button>
+          <button type="button" class="diag-footer-btn text-primary" (click)="goToDataSources()">
+            <i class="fa-solid fa-database me-1"></i> Orígenes de Datos
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 </ion-content>

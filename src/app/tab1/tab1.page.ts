@@ -211,6 +211,11 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     w.setTaskCategory = (columnId: string) => this.setTaskCategory(columnId);
     w.searchTasks = (term: string) => this.searchTasks(term);
     w.logout = () => this.logout();
+    w.openDataSources = () => this.openDataSources();
+  }
+
+  openDataSources() {
+    this.router.navigate(['/data-sources']);
   }
 
   async logout() {
